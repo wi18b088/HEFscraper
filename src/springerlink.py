@@ -1,6 +1,7 @@
 import pandas as pd
+import requests
 
-# Define Keywords
+# Define Keywords for one single combined search query
 keywords = ["hybrid", "electric", "flying", "aircraft"]
 
 # Get CSV from springerlink search (nice feature provided by Springer Link)
@@ -12,5 +13,9 @@ keywords = ["hybrid", "electric", "flying", "aircraft"]
 df = pd.read_csv('src/springerlink_search_results.csv')
 
 # Print information about dataframe
-print(df.columns)                       # Prints the headers
-print(df["Item Title"][0:5])            # Prints the first 5 titles of available papers
+# print(df.columns)                       # Prints the headers
+# print(df["Item Title"][0:5])            # Prints the first 5 titles of available papers
+
+# Download first article
+page = requests.get(df.at[0, "URL"])
+print(page.status_code)
