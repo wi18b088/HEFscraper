@@ -25,7 +25,7 @@ articlebody = soup.find('div', attrs={'class': 'c-article-body'})
 articlesections = articlebody.find_all('section')
 
 # Print contents of the article and write to file
-myfile = open(f"{soup.find('h1').text}.txt", "w")
+myfile = open(f"output/{soup.find('h1').text}.txt", "w")
 for sec in articlesections:
     try:
         # Print contents
