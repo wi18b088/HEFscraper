@@ -18,4 +18,4 @@ df = pd.read_csv('src/springerlink_search_results.csv')
 
 # Download first article
 page = requests.get(df.at[0, "URL"])
-print(page.status_code)
+print(page.status_code)                   # Prints 200 if get worked
