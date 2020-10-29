@@ -1,0 +1,286 @@
+AbstractThe increasing awareness of the environmental risks and costs due to the growing demand in aviation has prompted both academic and industrial research into short-term and long-term technologies which could help address the challenges. Among these, the more electric aircraft has been identified as a key design concept which would make aircraft more environmentally friendly and cost effective in the long run. Moreover, the notion of free-flight and optimised trajectories has been identified as a key operational concept which would help curb the environmental effects of aircraft as well as reduce overall costs. The research in this paper presents a methodology in which these two concepts can be coupled to study the benefits of more electric aircraft (MEA) flying optimised trajectories. A wide range of issues from aircraft performance, engine performance, airframe systems operation, power off-take penalties, emission modelling, optimisation algorithms and optimisation frameworks has been addressed throughout the study. The case study is based on a popular short haul flight between London Heathrow and Amsterdam Schiphol. The culmination of the study establishes the advantage of the MEA over conventional aircraft and also addresses the enhanced approach to the classical aircraft trajectory optimisation problem. The study shows that the operation procedures to achieve a minimum fuel burn are significantly different for a conventional aircraft and MEA. Trajectory optimisation reduced the fuel burn by 17.4% for the conventional aircraft and 12.2% for the more electric compared to the respective baseline cases. Within the constraints of the study, the minimum fuel burn trajectory for the MEA consumed 9.9% less fuel than the minimum fuel burn trajectory for the conventional aircraft.
+IntroductionAn aircraft with all secondary power systems operating electrically can be thought of as an all-electric aircraft (AEA). The definition of a more electric aircraft (MEA) can be derived as an aircraft where the majority of the systems or a higher percentage of systems compared to conventional aircraft are powered electrically.For the purpose of this research, the “more electric aircraft” has been defined as an aircraft which uses proportionally more electrical secondary power than a legacy or conventional aircraft. Feiner [1] suggests that aircraft with all-electric secondary power systems are expected to “cost less, be more reliable and be less expensive to operate”. He also goes on to say that benefits include reduced design complexity, reduced parts count, easier aircraft modification and less environmental impact. It is further endorsed by Arguelles et al. [2], where the MEA is highlighted as a pathway to achieving a lower environmental impact due to aviation. Moreover, it means that future aircraft will possibly have most equipment operating through electrical power [3].ACARE lists the MEA as an enabler to reach the 2020 goals [4].The scope for improvement of aircraft efficiency has also been extended to the aircraft operation domain. With global aviation growing at a fast rate, the traditional navigation and guidance measures need to be improved to achieve more robust and efficient aircraft operations to reduce the environmental impact. Trajectory control and trajectory optimisation play a key role in aircraft operation.Typically, the classical approach to trajectory optimisation consists of aircraft dynamic representation, engine performance and environmental impact models such as emissions and noise assessment [5, 6]. The airframe system penalties are either not represented or represented as a constant. However, the system operation depends on the flight condition itself and as demonstrated in [7] the fuel penalty due to the system operation is a variable and cannot be set as a constant in the context of trajectory optimisation. Overall the MEA systems, power requirements are even more sensitive to the flight conditions than the conventional airframe systems. In this study, the classical approach has been enhanced by representing more realistic airframe system performance within the optimisation loop.The airframe system operation is vital in representing real aircraft behaviour as it consumes a sizeable proportion of the aircraft engine’s power which has a knock-on effect on the fuel burn and consequently the optimisation of aircraft trajectory.Moreover, it is very important to establish from the outset that the concept of “more electric aircraft trajectory optimisation” cannot be discussed by ignoring the airframe systems, since an aircraft can only become more electric by substituting the conventional pneumatically and hydraulically powered systems with electrically powered systems. Hence, in the topic of trajectory optimisation for future aircraft the airframe systems need to be represented more accurately within the problem definition. The basis for representing the systems within the optimisation process is discussed in [7].
+Clean skyTo address the challenges of aviation in Europe, the European Commission (EC) initiated the Clean Sky program.Clean Sky programme is organised into six Integrated Technology Demonstrators (ITDs) and Technology Evaluator (TE) to evaluate the outputs of the ITDs. Systems for Green Operations (SGO) ITD address the novel and more efficient ways of managing aircraft energy, as well as aircraft trajectory and mission. This work is carried out as part of System for Green Operations (SGO) ITD and involves the development of a multi-objective optimisation framework for planning environmentally efficient trajectories to provide quantitative estimates of the energy used by them with a view to improving their efficiencies.
+MethodologyMEAThe electrical evolution in aircraft is discussed in detail in [8]. The focus in aircraft design has shifted towards the MEA to obtain greater overall efficiency. From the outset it should be realised that to fully utilise the advantages of the MEA, the operation as well as the design should be considered carefully.Two separate studies done by airframe manufacturers and research centres such as the National Aeronautics and Space Administration (NASA) give an indication of what loads would be present in a typical all-electric secondary power system for civil passenger aircraft.Figure 1 shows the estimated loads for a 300-passenger tri-engine aircraft [9]. These are the results of three studies conducted by the NASA Lewis Research Centre to assess the operational, weight and cost advantages for commercial transport aircraft with all-electric secondary power systems.
+Fig. 1Electric load demands—300-passenger, tri-engine aircraft [9]Full size image
+The following is an illustration on the load results found in the studies.A further separate study by NASA on a 600-passenger, four-engine aircraft produced the following preliminary estimates (Fig. 2).
+Fig. 2Electric load demands—600-passenger, four-engine aircraft [1]Full size image
+The two studies, though focusing on MEA, were done for different aircraft sizes. The loading details of the studies cannot be directly compared due to the differences in the breakdown of loads. However, there are certain observations which are common in both cases. The ECS is established as the largest power user by a considerable margin. Other major power users are the IPS and the flight control actuators; all three of these loads are not powered electrically in the conventional secondary power system configurations.The baseline for the airframe systems model used in this research was a 180-passenger twin-engine turbofan short-haul conventional aircraft which is similar to the Airbus A320. The objective of the airframe systems models is to provide the bleed air requirement and shaft power requirement to operate the secondary power system at any given operating condition. The ECS, IPS and the electrics were modelled in detail to represent the majority of the power requirement within the secondary power system. The power requirements for the actuation were not considered during this study. In the conventional aircraft the flight control surface actuators are powered hydraulically. The hydraulic system is constantly pressurised and thus is not a significant variable power off-take.The model was constructed in Matlab/Simulink and converted to a dynamic link library to improve execution times and integration capabilities. The baseline aircraft was converted to a MEA by replacing the non-electrically powered components with electrical components. The conventional electrical loads were derived using the methodology described in [10]. The requirements of the systems were not changed. The actuation for the MEA was not modelled. It is expected that the electrically powered actuation system will require a significant peak power. However, due to the nature of operation the actuator en route, the energy used is negligible [11].Further reading on the baseline aircraft, the configuration of the systems and validation can be found in [12]. Detailed modelling techniques for the conventional IPS and electro-thermal de-icing systems can be found at [13, 14], respectively.Off-takesTypically, turbofan aircraft engines are capable of providing bleed air off-takes and shaft power off-takes. The bleed air provides cabin pressurisation and ventilation as well as airframe anti-icing [15]. Moreover, it is also used to pressurise the hydraulic reservoir and the water tanks. Rolls-Royce [15] states that ideally the bleed air should be extracted at an early stage of the engine cycle, preferably the early stages of the compressor. However, it also confirms that to maintain appropriate temperatures and pressures, the bleed air may need to be extracted at a later compressor stage.Tagge et al. [16] estimated the following bleed air requirements, shown in Fig. 3, for a 207-passenger, twin-engine aircraft which was sized by the Boeing Commercial Airplane Company [17].
+Fig. 3Bleed airflow requirements—IDEA study by NASA [16]Full size image
+After conducting a critical review of the methods available, the kP method was chosen as the baseline for further development [18]. The kP method, presented in [19] represents the off-take penalties by a factor which relates the off-take power to net thrust ratio and the increase in the SFC due to off-takes.The off-takes are the interface between the airframe system power requirements and the engine performance. It is the enabler to represent airframe systems loads within the aircraft and engine performance.Trajectory optimisationAccording to Perry [20], the need for better air traffic management (ATM) is a driver for aircraft trajectory planning and optimisation in commercial aircraft. And optimising the flight trajectory for environmental gains is an important goal and a significant extension of the traditional avionic flight management system (FMS) and ATM tasks.The area of aircraft trajectory optimisation has been and is a key research area in Aerospace Engineering and it is also one of the key research topics addressed by the Clean Sky SGO ITD [21].Studies such as Refs. [22, 23] provide surveys of trajectory optimisation methods and the approach to apply the methods to commercial aircraft trajectory optimisation.There are many techniques and approaches that can be used to generate optimal commercial aircraft trajectories. In general, the trajectory of an aircraft can be optimised for many different objectives such as fuel, time, noise and emissions among others. Typically, the trajectory optimisation is heavily based on aircraft flight dynamics and performance, engine performance and optimisation techniques. This is the classical setup for aircraft optimisation. The approach has been enhanced in this study by including the airframe system penalties within the optimisation loop.Green aircraft trajectories under ATM constraints (GATAC)GATAC is the framework that has been developed to model, simulate, optimise and analyse aircraft trajectories within the SGO ITD Management of Trajectory and Mission (MTM) research framework.The GATAC tool has been discussed in depth in Chircop et al. [24]. The framework allows the user to set up a flight case by defining initial and final flight points as well as flight constraints. A typical setup is shown in Fig. 4.
+Fig. 4Typical setup in GATAC for trajectory optimisation [25]Full size image
+The approach for this study has been to use genetic algorithms as optimisers. It is accepted that optimal control theory is the common approach in solving trajectory optimisation problems. However, optimal control theory requires parameterisation for controls and states of the problem and typically uses gradient-based techniques to find the solution. Gradient-based optimisers are local minimum optimisation techniques.The vision within the Clean Sky SGO mission trajectory management is that many aspects such as real/forecast weather, airframe system penalties, operational business models and engine degradation could be included within the trajectory optimisation loop to closely represent real aircraft behaviour. Certain aspects of these representations, especially the weather which is not limited to the wind but also influences icing and contrails, cannot be easily parameterised without losing significant accuracy. To overcome these issues, genetic algorithms, which are able to search for a solution involving multiple imposed constraints and do not need heavy parameterisation techniques that are required by the optimal control approach, were preferred within the research which finds globally optimal solutions.However, this is a compromise, since the uses of GAs are expected to present challenges such as
+
+
+computational inefficiency in comparison to gradient-based optimisers;
+
+
+inefficiencies in handling a large number of input variables;
+
+
+producing results closer to the optimal solution rather than the local optima.
+
+
+Defining the baseline casesA real trajectory, which had a similar ground track to that shown in Fig. 7 was simulated. The vertical profile of the trajectory is shown in Figs. 5 and 6.
+Fig. 5London to Amsterdam typical flight; altitude profileFull size image
+Fig. 6London to Amsterdam typical flight: speed profileFull size image
+Table 1 shows the fuel burn and time results comparing zero system power, conventional system power and MEA system power.
+Table 1 Results summary of a typical flight—fuel burn and timeFull size table
+The baseline case is the “zero power off-takes” in which, the airframe system power off-take penalties are not accounted for within the problem definition. For the comparison of the gains achieved by trajectory optimisation, the baseline cases are configuration dependent.
+Results and discussionThis section presents the final results of the research. It presents the gains that are achieved by including airframe system penalties within the optimisation loop and compares the optimum flight operations for conventional and more electric aircraft in terms of fuel burn, flight time and emissions.Aircraft, engine and system setupThe baseline aircraft and engine for the short-haul study was similar to the Airbus A320 and the CFM-56-5B. The airframe systems were set according to the baseline setups described in Seresinhe et al. [12]. As a baseline, it was assumed that there would be an icing cloud between 7000 ft and 10,000 ft at a uniform temperature of 253 K with a liquid water content of 0.23 g/m3.Framework and optimiser setupGATAC trajectory optimisation software framework was used to run the simulation. GATAC has a set of optimisers which include a genetic-based optimiser called NSGAMO, and a multi-objective tabu search (MOTS) and also a hybrid optimiser [26, 27]. For this study, the NSGAMO was used.The setup is as follows:
+
+
+The flight trajectory was divided into three phases. Each flight phase was optimised with and without considering airframe system power off-take penalties.
+
+
+Optimiser used: NSGAMO (genetic algorithm developed by Cranfield University and based on NSGA-2 algorithm).
+
+
+Optimisation objectives were fuel burn and flight time for all three flight phases.
+
+
+Mission routeThe mission case chosen for this study is from London Heathrow airport to Amsterdam Schiphol airport. The mission was divided into three flight phases (departure, en route and arrival). Departure phase begins at 83 ft AGL (Above Ground Level) with an airspeed of 140 kts and terminates at the end of the Standard Instrumental Departure (SID). The SID selected for the departure phase is BPK7F. The ground track is shown in Fig. 7.
+Fig. 7Short-haul ground trackFull size image
+The en route phase starts after the aircraft has reached the BPK VOR waypoint and ends when the aircraft enters the Amsterdam Schiphol STAR procedure. During this phase, a minimum altitude of FL100 and a maximum of FL390 are used. These bounds give the optimiser the freedom to choose an optimum flight level within both lower and upper airspaces. The airspeed during the en route is limited by KCAS 310 for the lower boundary and by the maximum operation Mach number for the upper boundary.The arrival phase starts when the aircraft passes over SUGOL and terminates at 2000 ft AGL. The STAR used in this phase for Amsterdam Schiphol airport is RNAV-Night RWY06 and the entry altitude is set to FL100.Terminology used to discuss resultsThe terminology used in the section needs to be clarified.
+
+
+Min. fuel Trajectory optimised for minimum fuel burn.
+
+
+Min. time Trajectory optimised for minimum flight time.
+
+
+Zero power off-take No account is made for system power off-takes.
+
+
+With system power Conventional system power off-takes are modelled in the optimisation.
+
+
+System power post-processed Conventional system power off-takes are not included in the optimisation, but are added on in post-processing.
+
+
+MEA More electric system power off-takes are modelled in the optimisation.
+
+
+$${\text{Penalty}}\,{\text{due}}\,{\text{to}}\,{\text{systems}}\,\% =\frac{{{\text{system}}\,{\text{power}}\,{\text{post}}\,{\text{processed}} - {\text{zero}}\,{\text{power}}\,{\text{offtakes}}}}{{{\text{zero}}\,{\text{power}}\,{\text{offtakes}}}},$$
+                    (1)
+                
+$${\text{Fuel}}\,{\text{saving}}\,{\text{due}}\,{\text{to}}\,{\text{enhance}}\,{\text{approach}}\,\% =\frac{{{\text{with}}\,{\text{system}}\,{\text{power}} - {\text{systems}}\,{\text{power}}\,{\text{post-processed}}}}{{{\text{system}}\,{\text{power}}\,{\text{post-processed}}}}.$$
+                    (2)
+                
+Results and analysis: conventional system configurationDeparture resultsFigure 8 shows the Pareto fronts obtained at the end of the optimisations for the departure phase. It is possible to see that the setup with systems included is shifted to higher values of fuel consumption; this is obviously due to the consumption the systems introduce. However, the results regarding the minimum time are not so different between the two setups. It should be noted that better Pareto fronts could be obtained by increasing the number of evaluations which the optimiser performs. However, the objective of the research was to reach acceptable Pareto fronts with the ability to assess the impact of the airframe systems; therefore, the optimiser settings where set equal for both the setups. For clarity, only the “Min. fuel” results have been shown and discussed in detail.
+Fig. 8Pareto fronts—departure, short haulFull size image
+The departure trajectories in Fig. 9 show a saw-tooth pattern for the MEA and no-system cases. When the optimiser attempts to reduce the fuel consumed by levelling and then reducing the airspeed (see also Fig. 10), the aircraft then descends. This may be explained by the fact that the aircraft flight model uses a three degree-of-freedom dynamic model, hence there is no direct pitch attitude control. From an aircraft operational point of view, this could be prevented by the pitch control for improved passenger comfort, and a smoother trajectory could be achieved by the optimisation if a six degree-of-freedom model was implemented. Such further work would allow additional insights to be drawn, including regarding differences resulting from system off-takes.
+Fig. 9Altitude vs distance—departure, short haulFull size image
+Fig. 10True air speed vs distance—departure, short haulFull size image
+Figures 9 and 10 show the aircraft altitude and aircraft true airspeed for the “Min. fuel” results. The “Min. fuel—with system power” case climbs continuously to 10,000 ft and then flies level. It also flies faster at the beginning and it continues at a higher speed than the other two cases. The “Min. fuel—MEA” and “Min. fuel—zero power off-takes” are similar. The “Min. fuel—MEA” flies faster than the “Min. fuel—zero power off-takes” case but both fly at a lower speed than the “Min. fuel—with system power” and accelerate towards the end to meet the final conditions as specified.There is a distinct difference in the “Min. fuel” trajectories. The reason for the difference is the effect of the systems, which is shown in Fig. 11.
+Fig. 11Total power off-take per engine vs distance—departure, short haulFull size image
+As can be seen in Fig. 11, the MEA power off-take is much less than that of the conventional aircraft. The “Min. fuel—system power post-processed” and “Min fuel—with system power” have similar power off-take requirements during the first half of the phase. In the second half of the phase, the “Min. fuel—with system power” has a larger power off-take. However, the fuel penalty due to power off-take is dependent on the throttle setting of the engine as well. Large off-takes at lower throttle settings will cause large fuel penalties than large off-takes at higher throttle settings.Figure 11 shows combined power extractions of ECS, IPS, actuators and conventional electrical loads. Each of the systems have been modelled and validated in [10,11,12, 14]. Individual system off-takes have not been analysed. However, the driver of the difference between the conventional aircraft and MEA is the ECS due to the difference in off-take nature and controllability of the bleed driven and electrical ECS, respectively.The fuel penalty due to systems is not significant enough to change the trajectory when the setup is optimised for time. However, when the objective is to fly with the minimum fuel burn, the effect of the systems is significant.By studying the trajectory using Figs. 11 and 12, it was observed that for the “system power post-processed” trajectories, there was a relatively high off-take at lower thrust conditions which caused a significant fuel penalty. It should be noted that the total power off-take is the sum of the shaft power off-take and the bleed air off-take. The bleed air flow is converted to a power using
+Fig. 12Throttle vs distance—departure, short haulFull size image
+$$\dot {Q}={\dot {m}_{\text{a}}}{C_{\text{p}}}({T_{\text{e}}} - {T_{\text{i}}}).$$
+                    (3)
+                
+The exit temperature of air for the secondary power system is arguable. For this study, the exit temperature of air has been established as the ambient temperature at the operating environment of the aircraft. Even though the exit temperature of the ECS is the cabin temperature and the exit temperature for the IPS is the temperature at the exit of the piccolo tubes, at the point of exit for both systems, there is still energy stored within the air. Hence, only a proportion of the actual energy within the bleed flow is exhausted by the ECS and IPS. Since there is no energy recovery within the typical conventional secondary power system, using exit temperatures of the systems cannot be justified and cannot be used to calculate the energy extracted from the engine to operate the pneumatic based systems.A key difficulty in interpreting the results was that the behaviour of the optimised trajectory cannot be easily predicted since there are numerous parameters significantly influencing the optimisation process. This is especially true for the effect of airframe systems since the relationship between the airframe system operation and optimum flight trajectory is twofold; the system off-takes influence the trajectory due to fuel burn and the trajectory and the ambient conditions also influence the power requirements of the overall systems.However, the summary of the results in Table 2 indicates the advantage in using the enhanced approach to aircraft trajectory optimisation; which is to include the airframe systems within the optimisation loop. The systems add a penalty of 5.15% on the fuel burn if the “Min. fuel—zero power off-takes” trajectory is applied in an aircraft with conventional systems. The fuel burn can be reduced by 2.78% using the enhanced optimisation approach. This is the gain of the “Min. fuel—with system power” over the “Min. fuel—system power post-processed”.
+Table 2 Results’ summary of the departure segment, short haulFull size table
+Figures 13 and 14 illustrate the advantage in terms of emissions. CO2 and NOX emissions are lower for the “Min. fuel—with system power” than the “Min. fuel—system power post-processed”, which establishes the environmental gains that the enhanced approach offers.
+Fig. 13Total CO2 emissions vs distance—departure, short haulFull size image
+Fig. 14Total NOX emissions vs distance—departure phaseFull size image
+The enhanced approach to optimisation provided the platform to define and study the problem of “more electric aircraft trajectory optimisation”. The same city pair and constraints were applied to a more electric aircraft. The results showed that there was significant reduction in the fuel burn. The work presented here focuses on the minimum fuel burn trajectories, since one of the advantages of the MEA is the expected environmental gain in terms of fuel efficiency. The starting mass of the aircraft was the same as for the conventional aircraft. There were many reasons for this. First, the increase in mass using state-of-the-art electrical systems compared to the overall aircraft mass will likely be small. Furthermore, the system mass is a fixed mass and is not a variable mass such as the fuel. This limits the effect the MEA mass increase has on the overall trajectory optimisation procedure. Finally, with the current trends in technology development, it could be assumed that the power to weight ratio of more electric aircraft components will improve to a level where there is no mass penalty.It is inferred that the combined effect of the throttle setting and power off-take allows the more electric aircraft to fly lower and accelerate heavily at the end of the phase to reach the final condition without a significant fuel penalty in the last segments. The power off-takes for the MEA are comparatively lower and that enables the aircraft to fly at lower throttle conditions (in the descending sections) without a heavy fuel penalty, whereas the aircraft with conventional systems climbs constantly at a lower gradient until it reaches 10,000 ft and then levels off. This is further evidence on the importance of combining the system operation and aircraft operation in optimisation studies and indicates that more electric aircraft operations should be different to conventional aircraft within trajectory optimisation.The total fuel burn for the “Min. fuel—MEA” was 586 kg. This is 1.5% less than “Min fuel—with system power”. This results in lower CO2 emissions but higher NOX emissions as shown in Figs. 13 and 14. The higher NOX is a result of the engine operating at a much higher temperature during the later stages of the departure to climb to 10,000 ft, whereas in the aircraft with conventional systems, the aircraft reaches 10,000 ft much quicker and flies level as shown in Fig. 9 (Table 3).
+Table 3 Comparison of MEA to conventional aircraft, short-haul departureFull size table
+En route resultsFigures 15 and 16 show the aircraft altitude and aircraft Mach number profiles for the minimum fuel burn trajectories for the two different setups.
+Fig. 15Altitude vs distance—en route, short haulFull size image
+Fig. 16Flight Mach number vs distance—en route, short haulFull size image
+The altitude profile of the simulation “Min. fuel—zero power off-takes” where the aircraft systems are not considered keeps climbing until the descent and then descends to the end point of the phase. In contrast, the simulation “Min. fuel—with system power” where the aircraft systems are considered generates a profile where it is possible to see several cruise levels before starting the descent to the end point of the phase. It is, therefore, noticeable that the setup without systems in the loop for minimum fuel climbs at lower Mach numbers until the top of the descent and then accelerates and descends at higher speed. The setup with systems in the loop for minimum fuel instead cruises at higher speed and then decelerates and descends at lower speed.This is quite an important characteristic since most theoretical studies show that for minimum fuel burn, an aircraft should have a continuous climb and then a continuous descent. Yet from an aircraft system operational point of view, a continuous climb and a continuous descend would cause a higher operational load. For example, a continuous climb would cause a heavy load on the ECS pressurisation and thermal regulation, whereas a continuous descent would cause a significantly higher power off-take to thrust ratio, which causes higher fuel penalties. Hence, it was interesting to observe the compromise reached when the systems were operational.Moreover, the MEA shows intermediate characteristics. In the “Min. fuel” trajectories the MEA shows the tendency to have a continuous climb but also shows signs of levelling off and starts to descend at a higher rate than the “Min. fuel—zero power off-takes” trajectory. The “Min. time” trajectories tend to fly faster at lower altitudes and this is observed in Figs. 15 and 16.The environmental gains are shown in Figs. 17 and 18. For both CO2 and NOX, the MEA has an advantage over the conventional aircraft. The characteristics are very similar to those observed during the departure phase.
+Fig. 17Total CO2 emissions vs distance—en route, short haulFull size image
+Fig. 18Total NOX emissions vs distance—en route, short haulFull size image
+During the en route, the enhanced approach of including airframe systems within the optimisation loop gave a 2.6% (from Table 4) fuel saving, when trajectories were optimised for fuel burn. When the trajectories were optimised for flight time, the fuel saving was 3.7%. The MEA showed a significantly lower fuel burn than the conventional aircraft offering an 11.4% (from Table 5) reduction in fuel burn for the “Min. fuel” trajectories.
+Table 4 Results’ summary of the en route segment, short haulFull size table
+Table 5 Comparison of MEA to conventional aircraft, short-haul en routeFull size table
+Effects due to systems studied in detail for the en route segmentThe en route segment, due to the higher impact on the total mission flight time, was analysed in detail to study the behaviour of the systems and the consequent effects. The “Min. fuel—system power post-processed” was compared to the “Min. fuel—with system power” trajectory.Figure 19 shows the difference in the fuel flow rates, while the CO2, NOX, throttle and the total power off-take are shown in Figs. 17, 18, 20, and 21, respectively. One characteristic of importance is that the system power off-take affects the fuel burn heavily during lower engine operating conditions. This can be clearly identified by studying the power off-take, throttle and fuel flow in conjunction with each other. At the later stages of the en route when the aircraft is in the initial descent stages, there is a distinct peak in the fuel flow rates. This is partly due to the fact that the “Min. fuel—system power post-processed” trajectory is at a higher altitude (refer Fig. 15) and higher speed (refer Fig. 16) during this stage. But it is also due to the impact that the power off-take has on low-throttle engine operating conditions. During this stage, it was observed that the throttle required for both flight procedures was low. The off-take influences the fuel flow more than it would do in higher throttle settings and is an expected characteristic in large commercial turbofan engines.
+Fig. 19Fuel flow vs distance—en route, short haulFull size image
+Fig. 20Throttle vs distance—en route, short haulFull size image
+Fig. 21Power off-take per engine vs distance—en route, short haulFull size image
+When comparing the two flight procedures, it was observed that the “Min. fuel—with system power” had a comparatively higher average throttle rating. This is also reflected in the NOX emissions in Fig. 18. The higher throttle settings indicate that the engine is operating at a higher temperature and it is expected that the NOX emissions would be comparatively higher. By studying Figs. 17 and 18 it is clear that there is a trade-off between NOX and CO2 as is expected in large commercial turbofan engines.With regard to the MEA, the power off-takes were lower than the conventional aircraft as expected. The en route was simulated in ISA atmospheric conditions; hence, the major consumer which is the ECS did not reach the design limits. The lower off-take combined with the throttle, altitude and speed profiles enabled the MEA to achieve a more efficient procedure for flight and presents significant environmental gains. The CO2 reduction was 11.4% and the NOX reduction was 3.8%.Arrival resultsDue to the nature of the arrival problem, it was observed that the number of feasible results were far less than the departure and en route phase. The cause of this issue was inherent in the definition of the problem.With regard to the specific setup used in this study it presented a significant challenge in defining the “arrival” phase optimisation. The optimisation setup tries to find the best route possible, in terms of the objective, between two given points in 3-D space. Due to this nature, it was observed that occasionally the setup was not able to converge on feasible arrival trajectories. It was observed that the aircraft descended rapidly and then flew level just above ground for a great distance. Even though in theory this consumes less fuel, it is not accepted in an aircraft operational environment. Hence, steps were taken to limit the final point of the aircraft arrival phase to an altitude of 2000 ft. This ensured that the setup always produced feasible flight procedures. The final descent (from 2000 ft to final altitude of the airport) was calculated manually, assuming a constant glide angle.Figures 22 and 23 show the aircraft altitude and aircraft true airspeed as function of arrival phase for the minimum fuel burn and minimum flight time trajectories. As expected, the minimum fuel burn trajectories tend to descend slower and reach the final point while descending, whereas the minimum time trajectories descend faster and then fly level to reach the final point.
+Fig. 22Altitude vs distance—arrival, short haulFull size image
+Fig. 23True air speed vs distance—arrival, short haulFull size image
+Unlike in the previous flight phases, the “Min. time” trajectories are quite different from each other. However, the “Min. time” trajectories all prefer to descend as soon as possible and fly level at the minimum altitude whereas the “Min. fuel” trajectories prefer to reach the final condition through a continuous descent.Figures 24 and 25 show the CO2 and NOX emissions for the arrival phase. The emissions for the MEA are significantly less than the conventional aircraft. The lower throttle settings and the comparatively lower off-takes result in a lower fuel burn for the MEA.
+Fig. 24Total CO2 emissions vs distance—arrival, short haulFull size image
+Fig. 25Total NOX emissions vs distance—arrivalFull size image
+Tables 6 and 7 summarise the results for the “arrival” optimisation for minimum fuel burn and minimum flight time.
+Table 6 Results summary of the arrival segmentFull size table
+Table 7 Comparison of MEA to conventional aircraft, short-haul en routeFull size table
+Summary of the short-haul flightA summary of the results for the complete mission (departure, en route, arrival) is shown in Tables 8 and 9.
+Table 8 Results’ summary of the short-haul flight, conventional aircraftFull size table
+Table 9 Results summary of the short-haul flight, MEAFull size table
+Table 10 summarizes the gains achieved using trajectory optimisation. Each aircraft configuration was compared to the respective baseline case. The “zero power off-takes” showed the biggest gain for fuel efficiency while the “MEA” had the lowest gain. The result here shows that the classical approach to trajectory optimisation may exaggerate the gains due to optimisation.
+Table 10 Gains by optimising for fuel burn and flight timeFull size table
+From the overall results it was observed that had the “Min. fuel” results obtained through the classical approach been applied in a real aircraft, the conventional airframe systems would have caused the flight to consume 16.6% more fuel than was calculated. However, by considering the conventional system power requirements within the optimisation loop, this penalty was reduced by 2.5%. The optimal way (considering the optimisation constraints) to fly the aircraft with consideration of the conventional system off-takes was significantly different from an aircraft with zero power off-takes. The minimum fuel burn trajectory for the MEA consumed 9.9% less fuel than the minimum fuel burn trajectory for the conventional aircraft. However, it should be noted that phenomena which have not been considered here, such as induced drag due to more electric compressors and extra weight due to the heavier electrical components, may reduce this advantage based on current technology. The enhanced approach, as discussed above, provided a fuel reduction of 2.5% which directly results in a 2.5% reduction of CO2 emissions but the NOX emissions increased by 2.9%. However, the optimisation objectives were fuel and time. With the inversely proportional relationship between CO2 and NOX this is an expected phenomenon. The MEA proved to have 9.9% less CO2 emissions and 1.97% less NOX emissions.When the objective was the minimum flight time, the results in terms of the altitude and speed profiles did not vary as much as the “Min. fuel” trajectories. Nevertheless, applying the enhanced optimisation approach to conventional aircraft showed that overall fuel burn can be reduced by 2.6%, the CO2 emissions can be reduced by 2.6% and the NOX emissions reduced by 4.3%. This is significant enough to challenge the validity of the optimality of the classical approach even when the optimisation objective is different to the fuel burn. When optimised for the minimum flight time, the MEA showed 8.1% reduction in fuel burn, 8.1% reduction in CO2 and a 1.77% increase in NOX emissions. The flight time of the MEA was less, which was due to the MEA flying faster at a higher throttle. The lower off-takes of the MEA configuration allowed the aircraft to operate at a higher throttle without causing a significant penalty on the fuel flow. However, the higher throttle meant that the engine operating temperatures, especially the combustor inlet temperature was higher for longer periods resulting in an increase in the NOX emissions.The increase in NOX is in contrast to the “Min. fuel” results and show that the complex dependencies within the system aircraft dynamics, airframe system performance, and engine performance have to be accounted for to have valid results for trajectory optimisation.
+ConclusionA robust methodology to model the airframe system penalties within the trajectory optimisation scope has been presented in this research. Moreover, the study clearly demonstrated the need for the representation of the airframe system penalties within the optimisation loop. It established and defined the problem “more electric aircraft trajectory optimisation”.The overall results show the importance of including the airframe systems off-takes in the optimisation loop. More importantly, the results establish that the optimum methods to operate conventional aircraft and MEA are significantly different and that these results can be obtained if only the airframe systems are considered in the problem definition.Moreover, the results also showed that gains due to optimisation could be exaggerated when the airframe system penalties were not represented in the problem setup. Trajectory optimisation reduced the fuel burn by 17.4% for the conventional aircraft and 12.2% for the more electric compared to the respective baseline cases, when the mission was optimised for fuel burn.Furthermore, the MEA proves to be more fuel efficient than the conventional aircraft.The minimum fuel burn trajectory for the MEA consumed 9.9% less fuel than the minimum fuel burn trajectory for the conventional aircraft. Moreover, the MEA proved to have 9.9% less CO2 emissions and 1.97% less NOX emissions compared to the conventional aircraft when both were optimised for minimum fuel burn.The MEA showed 8.1% reduction in fuel burn, 8.1% reduction in CO2 and a 1.77% increase in NOX emissions when the flight was optimised for minimum flight time.This study has focused on a single-aircraft and single-trajectory result. However, when applied to the vast amount of flights flown everyday across distances small and large, the methodology presented could lead to significant global gains.
+Further workFurther work is planned to include more models within the optimisation scope to represent phenomena such as real-weather patterns and engine degradation to enhance the optimisation approach further such that the theoretical studies will closely represent operational aircraft. Additionally, cost and operational business aspects will be included in post-processing of results.Large users of electrical power on MEA (such as ECS and wing IPS) are expected to have a significant weight penalty compared to conventional pneumatic systems based on current electrical machines and power electronic technologies. Future work should account for these differences to refine the mission fuel burn calculations.Moreover, this study has focused only on the vertical flight trajectory, but further studies will be done in optimising the 3-D space by including lateral trajectory optimisation to study the advantages of the concept of “free flight”. Moreover, study of concepts such as “intelligent flying with intelligent systems” where the aircraft will change the flying trajectory due to weather conditions such as icing clouds, with the minimum fuel penalty, is planned. In addition to the above-mentioned scenarios, more objectives such as minimum NOX emissions, cost and minimum persistent contrail formation will be studied. Future work is also planned to compare short-haul and long-haul optimisation results to assess the optimum strategy to replace conventional aircraft with more electric aircraft.
+Abbreviations3-D:
+Three dimensional
+ACARE:
+Advisory Council
+ADP:
+Air-driven pump
+AEA:
+All-electric aircraft
+AGL:
+Above ground level
+ATM:
+Air traffic management
+CO2
+                              :
+Carbon dioxide
+Conv.:
+Conventional aircraft (with conventional airframe systems)
+EC:
+European Commission
+ECS:
+Environmental control system
+EPNL:
+Effective perceived noise level
+FL:
+Flight level
+FMS:
+Flight management system
+GA:
+Genetic algorithm
+GATAC:
+Green aircraft trajectories under ATM constraints
+HYD:
+Hydraulic
+IPS:
+Ice protection system
+ISA:
+International standard atmosphere
+ITD:
+Integrated technology demonstrator
+KCAS:
+Calibrated air speed in knots
+LAMAX:
+A-weighted maximum sound level
+MEA:
+More electric aircraft
+MOTS:
+Multi-objective tabu search
+MTM:
+Mission trajectory management
+NOX
+                              :
+Nitrous oxide
+NSGA:
+Non-dominated sorting genetic algorithm
+NSGAMO:
+Non-dominated sorting genetic algorithm multi-objective
+PNLTM:
+Tone-corrected maximum perceived noise level
+RNAV:
+Area navigation
+RWY:
+Runway
+SEL:
+Sound exposure level
+SGO:
+Systems for greener operations
+SID:
+Standard instrument departure
+STAR:
+Standard instrument arrival
+TAI:
+Thermal anti-ice
+TAS:
+True airspeed
+TE:
+Technology evaluator
+VOR:
+VHF omnidirectional range
+WP:
+Way point
+ft:
+Feet
+g/m3
+                              :
+Grams per cubic metre
+K:
+Kelvin
+kg:
+Kilograms
+kg/s:
+Kilograms per seconds
+kN:
+KiloNewton
+kts:
+Knots
+kW:
+KiloWatts
+lb:
+Pounds
+m:
+Metres
+N:
+Newtons
+s:
+Seconds
+W:
+Watts
+
+References1.Feiner, L.J.: Power-by-Wire Aircraft Secondary Power Systems. In: AIAA/IEEE, 1993. ISBN 0-7803-1343-72.Arguelles, P., et al.: European Aeronautics: A Vision for 2020—Meeting Society’s Needs and Winning Global Leadership. European Commission, Luxembourg (2001)
+                    Google Scholar 
+                3.Rosero, J.A., et al.: Moving towards a more electric aircraft. IEEE Aerosp. Electron. Syst. Mag. 22(3), 3–9 (2007)Article 
+    
+                    Google Scholar 
+                4.ACARE.: Strategic Research Agenda, vol. 2. ACARE (2002). https://www.acare4europe.org/contacts
+5.Norman, P.D., et al.: Development of the Technical Basis for a New Emissions Parameter Covering the Whole Aircraft Operation: NEPAIR. 2003. Final Technical Report; NEPAIR/WP4/WPR/01. EC Contract Number G4RD-CT-2000-001826.DuBois, D., Paynter, G.: “Fuel Flow Method2” for estimating aircraft emissions. In: SAE International, 2006. SAE Technical Paper 3006-01-1987. https://doi.org/10.4271/2006-01-1987
+7.Seresinhe, R., Lawson, C., Sabatini, R.: Environmental impact assessment, on the operation of conventional and more electric large commercial aircraft. SAE Int. J. Aerosp. (2013). https://doi.org/10.4271/2013-01-2086
+
+                    Google Scholar 
+                8.Seresinhe, R., Lawson, C.: The MEA evolution in commercial aircraft and the consequences for initial aircraft design. STM J. 3, 1–15 (2013) (ISSN 2231-038X)
+
+                    Google Scholar 
+                9.Renz, D.D.. Comparison of All-Electric Secondary Power Systems for Civil Subsonic Transport. In: SAE-929493, 199210.Seresinhe, R., Lawson, C.: Electrical load sizing methodology to aid conceptual and preliminary design of large commercial aircraft. Proc. Inst. Mech. Eng. Part G J. Aerosp. Eng. (2014). https://doi.org/10.1177/0954410014534638
+(SAGE (On behalf of IMechE))
+
+                    Google Scholar 
+                11.Cooper, M., Lawson, M., Zare Shahneh, A.: Simulating actuator energy consumption for trajectory optimisation. Proc. Inst. Mech. Eng. Part G. J. Aerosp. Eng. 232(11), 2178–2192 (2017)
+                    Google Scholar 
+                12.Seresinhe, R., Lawson, C., Shinkafi, A., Quaglia, D., Madani, I.: Airframe Systems Power Off-take Modelling in More-Electric Large Aircraft for Use in Trajectory Optimisation. ICAS, St. Petersburgh (2014)
+                    Google Scholar 
+                13.Seresinhe, R., Lawson, C., Shinkafi, A., Quaglia, D., Madani, I.: An Intelligent Ice Protection System for Next Generation Aircraft Trajectory Optimisation. ICAS, St Petersburgh (2014)
+                    Google Scholar 
+                14.Shinkafi, A., Lawson, C.: Enhanced method of conceptual sizing of aircraft electro-thermal de-icing system. Int. J. Mech. Aerosp. Manuf. Ind. Sci. Eng. 8(6), 1069–1076 (2014)
+                    Google Scholar 
+                15.Rolls-Royce. The jet engine. Rolls-Royce plc, Derby, UK (1986) (ISBN 0902121235)
+                    Google Scholar 
+                16.Tagge, G.E., Irish, L.A., Bailey, A.R.: Systems Study for an Integrated Digital/Electric Aircraft (IDEA). Scientific and Technical Information Branch, National Aeronautics and Space Administration (NASA). NASA, 1985. NASA Contractor Report 384017.Boeing Commercial Airplane Company.: Integrated Application of Active Controls (IAAC) Technology to an Advanced Subsonic Transport Project—Initial Act Configuration Design Study, Summary Report. Scientific and Technical Information Branch, National Aeronautics and Space Administration (NASA). NASA, 1980. NASA Contractor Report 330418.Giannakakis, P., Laskaridis, P., Pilidis, P.: Effects of offtakes for aircraft secondary-power systems on jet engine efficiency. J. Propuls. Power (2011). https://doi.org/10.2514/1.55872
+
+                    Google Scholar 
+                19.Scholz, D., Seresinhe, R., Ingo, S., Lawson, C.: Fuel Consumption due to Shaft Power Off-takes from the Engine. In: Aircraft system technologies workshop, Hamburg, Germany, 14–15 April 201320.Perry, T.S.: In search of the future of air traffic control. IEEE Spectr. (1997). https://doi.org/10.1109/6.609472
+
+                    Google Scholar 
+                21.Clean Sky.: Systems for Green Operation. Clean Sky. http://www.cleansky.eu/systems-for-green-operations-sgo. Cited 07 Jul 201722.Betts, J.T.: Survey of numerical methods for trajectory optimization. J. Guid. Control Dyn. 21(2), 193–207 (1998)Article 
+    MATH 
+    
+                    Google Scholar 
+                23.Betts, J.T., Cramer, E.J.: Application of direct transcription to commercial aircraft trajectory optimization. J. Guid. Control Dyn. 18, 151–159 (1995)Article 
+    MATH 
+    
+                    Google Scholar 
+                24.Chircop, K., et al.: A Generic Framework for Multi-parameter Optimization of Flight Trajectories. In: 27th ICAS Congress, Nice, France. 19–24 September 201025.Hartjes, S., et al.: Systems for Green Operations (SGO) ITD—Report on the Performance Analysis of the Trajectories—Cycle 1—WP3.2. Clean Sky—SGO ITD (Internal) (2012)26.Pervier, H., et al.: Application of genetic algorithm for preliminary trajectory optimization. SAE Int. J. Aerosp. 4(2), 973–987 (2011)Article 
+    
+                    Google Scholar 
+                27.Tsotskas, C., Kipouros, T., Savill, A.M.. The design and implementation of a GPU-enabled multi-objective tabu-search intended for real world and high-dimensional applications. Procedia Comput. Sci. 29, 2152–2161 (2014)Article 
+    
+                    Google Scholar 
+                Download references
+AcknowledgementsThis work has been carried out as part of collaboration between members and associate members involved in the SGO ITD of Clean Sky. The project is co-funded by the European Community’s Seventh Framework Programmes (FP7/2007-2014) for the Clean Sky Joint Technology Initiative.
+Author informationAffiliationsSchool of Aerospace Transport and Manufacturing, Cranfield University, Cranfield, UKRavinka Seresinhe, Craig Lawson & Irfan MadaniAuthorsRavinka SeresinheView author publicationsYou can also search for this author in
+                        PubMed Google ScholarCraig LawsonView author publicationsYou can also search for this author in
+                        PubMed Google ScholarIrfan MadaniView author publicationsYou can also search for this author in
+                        PubMed Google ScholarCorresponding authorCorrespondence to
+                Craig Lawson.
+Rights and permissions
+Open Access This article is distributed under the terms of the Creative Commons Attribution 4.0 International License (http://creativecommons.org/licenses/by/4.0/), which permits unrestricted use, distribution, and reproduction in any medium, provided you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons license, and indicate if changes were made.
+Reprints and Permissions
+About this articleCite this articleSeresinhe, R., Lawson, C. & Madani, I. Improving the operating efficiency of the more electric aircraft concept through optimised flight procedures.
+                    CEAS Aeronaut J 10, 463–478 (2019). https://doi.org/10.1007/s13272-018-0327-yDownload citationReceived: 17 July 2017Revised: 28 February 2018Accepted: 11 September 2018Published: 22 September 2018Issue Date: 01 June 2019DOI: https://doi.org/10.1007/s13272-018-0327-yKeywordsMore electric aircraftAircraft trajectory optimisationAircraft emissionsAircraft secondary power
