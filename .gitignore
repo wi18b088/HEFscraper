@@ -2,7 +2,7 @@
 .vscode/
 
 # program
-lgo/*
+log/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
