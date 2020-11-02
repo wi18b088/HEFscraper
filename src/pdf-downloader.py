@@ -3,6 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 import logging
 import os
+import urllib.request
 
 # Define some parameters
 ownFileName = os.path.basename(__file__)
@@ -64,20 +65,18 @@ for i, row in df.iterrows():
 
     page = requests.get(row["URL"])
     if page.status_code == 200:
-        soup = BeautifulSoup(page.text, 'html.parser')
-        articlebody = soup.find('div', attrs={'class': 'c-article-body'})
-
-        # No Article Contents
-        if articlebody is None:
-            logger.info(f"Position {i}: Entry with name '{row['Item Title']}' has no article body content.")
+        soup = BeautifulSoup(page.text, 'html.parser') # Point of change to PDF, rest can be left alone for now. 
+        # Find PDF button on site
+        PDFbutton = soup.find('a', attrs={'class': 'c-pdf-download__link'})
+        # PDF file URL
+        PDFurl = requests.get(PDFbutton.get('href'))
+        print(PDFurl)
+        
+        # No PDF button found
+        if PDFbutton is None:
+            logger.info(f"Position {i}: Entry with name '{row['Item Title']}' has no PDF button")
             continue
 
-        articlesections = articlebody.find_all('section')
-        with open(f"{outputFolderName}/{i}_{soup.find('h1').text}.txt", "w") as myfile:
-            for sec in articlesections:
-                try:
-                    # Save contents to file
-                    myfile.write(sec.text)
-                    myfile.write("\n")
-                except:
-                    pass
+        local_filename = soup.find('h1').text
+        # Download file to output folder    
+        urllib.request.urlretrieve(PDFurl, outputFolderName)
