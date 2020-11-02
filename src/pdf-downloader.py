@@ -43,14 +43,17 @@ logger.addHandler(file_handler)
 
 # Define Keywords for one single combined search query
 keywords = ["hybrid", "electric", "flying", "aircraft"]
+startYear = 2010
+endYear = 2021
+contentType = "Article"
 
 # Get CSV from springerlink search (nice feature provided by Springer Link)
 # URL taken from https://link.springer.com/search
 # Additional constraints possible
 # Download from web disabled for development / debug
-# df = pd.read_csv(f'https://link.springer.com/search/csv?showAll=false&query={"+".join(keywords)}')
-
-df = pd.read_csv(f'{sourceFolderName}/springerlink_search_results.csv')
+df = pd.read_csv(f'https://link.springer.com/search/csv?showAll=false&query={"+".join(keywords)}&date-facet-mode=between&facet-start-year={startYear}&facet-end-year={endYear}&facet-content-type="{contentType}"')
+print(df.head())
+#df = pd.read_csv(f'{sourceFolderName}/springerlink_search_results.csv')
 
 # Print information about dataframe
 # print(df.columns)                       # Prints the headers
@@ -63,42 +66,21 @@ for i, row in df.iterrows():
     if i == 10:
         break
 
-    # Check if content type is an article    
-    if requests.get(row["Content Type"]) is "Article":
-        # Check if publication year is recent
-        if requests.get(row["Publication Year"]) => 2010:
-            page = requests.get(row["URL"])
-            if page.status_code == 200:
-                soup = BeautifulSoup(page.text, 'html.parser')
-                
-                # Find PDF button on site
-                PDFbutton = soup.find('a', attrs={'class': 'c-pdf-download__link'})
+        page = requests.get(row["URL"])
+        if page.status_code == 200:
+            soup = BeautifulSoup(page.text, 'html.parser')
+            
+            # Find PDF button on springerlink website
+            PDFbutton = soup.find('a', attrs={'class': 'c-pdf-download__link'})
+            if PDFbutton is not None:
+                URL = PDFbutton.get('href')
+            else: # Find alternative PDF download button
+                PDFbutton = soup.find('a', attrs={'data-track-action': 'Pdf download'})
                 if PDFbutton is not None:
-                    URL = PDFbutton.get('href')
-                else: # Find alternative PDF download button
-                    PDFbutton = soup.find('a', attrs={'data-track-action': 'Pdf download'})
-                    if PDFbutton is not None:
-                        URL = "https://link.springer.com" + PDFbutton.get('href')
-                    else:
-                        continue
+                    URL = "https://link.springer.com" + PDFbutton.get('href')
+                else:
+                    continue
 
-                local_filename = soup.find('h1').text
-                # Download file to output folder    
-                urllib.request.urlretrieve(URL, outputFolderName+"/"+local_filename+".pdf")
-        else:
-            continue
-    else:
-        continue
-            # No PDF button found
-            #if PDFbutton is None:
-                # try different method
-                #PDFbutton = soup.find('a', attrs={'data-track-action': 'Pdf download'})
-                #"https://link.springer.com" + PDFbutton.get('href')
-                #print(PDFbutton)
-                #if PDFbutton is None:
-                    #logger.info(f"Position {i}: Entry with name '{row['Item Title']}' has no PDF button")
-                    #continue
-
-
-    
-       
+            local_filename = soup.find('h1').text
+            # Download file to output folder    
+            urllib.request.urlretrieve(URL, outputFolderName+"/"+local_filename+".pdf")    
