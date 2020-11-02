@@ -63,17 +63,42 @@ for i, row in df.iterrows():
     if i == 10:
         break
 
-    page = requests.get(row["URL"])
-    if page.status_code == 200:
-        soup = BeautifulSoup(page.text, 'html.parser') # Point of change to PDF, rest can be left alone for now. 
-        # Find PDF button on site
-        PDFbutton = soup.find('a', attrs={'class': 'c-pdf-download__link'})
-        
-        # No PDF button found
-        if PDFbutton is None:
-            logger.info(f"Position {i}: Entry with name '{row['Item Title']}' has no PDF button")
-            continue  
+    # Check if content type is an article    
+    if requests.get(row["Content Type"]) is "Article":
+        # Check if publication year is recent
+        if requests.get(row["Publication Year"]) => 2010:
+            page = requests.get(row["URL"])
+            if page.status_code == 200:
+                soup = BeautifulSoup(page.text, 'html.parser')
+                
+                # Find PDF button on site
+                PDFbutton = soup.find('a', attrs={'class': 'c-pdf-download__link'})
+                if PDFbutton is not None:
+                    URL = PDFbutton.get('href')
+                else: # Find alternative PDF download button
+                    PDFbutton = soup.find('a', attrs={'data-track-action': 'Pdf download'})
+                    if PDFbutton is not None:
+                        URL = "https://link.springer.com" + PDFbutton.get('href')
+                    else:
+                        continue
+
+                local_filename = soup.find('h1').text
+                # Download file to output folder    
+                urllib.request.urlretrieve(URL, outputFolderName+"/"+local_filename+".pdf")
+        else:
+            continue
+    else:
+        continue
+            # No PDF button found
+            #if PDFbutton is None:
+                # try different method
+                #PDFbutton = soup.find('a', attrs={'data-track-action': 'Pdf download'})
+                #"https://link.springer.com" + PDFbutton.get('href')
+                #print(PDFbutton)
+                #if PDFbutton is None:
+                    #logger.info(f"Position {i}: Entry with name '{row['Item Title']}' has no PDF button")
+                    #continue
+
+
     
-        local_filename = soup.find('h1').text
-        # Download file to output folder    
-        urllib.request.urlretrieve(PDFbutton.get('href'), outputFolderName+"/"+local_filename+".pdf")
+       
