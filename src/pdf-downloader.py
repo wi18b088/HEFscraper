@@ -68,15 +68,12 @@ for i, row in df.iterrows():
         soup = BeautifulSoup(page.text, 'html.parser') # Point of change to PDF, rest can be left alone for now. 
         # Find PDF button on site
         PDFbutton = soup.find('a', attrs={'class': 'c-pdf-download__link'})
-        # PDF file URL
-        PDFurl = requests.get(PDFbutton.get('href'))
-        print(PDFurl)
         
         # No PDF button found
         if PDFbutton is None:
             logger.info(f"Position {i}: Entry with name '{row['Item Title']}' has no PDF button")
-            continue
-
+            continue  
+    
         local_filename = soup.find('h1').text
         # Download file to output folder    
-        urllib.request.urlretrieve(PDFurl, outputFolderName)
+        urllib.request.urlretrieve(PDFbutton.get('href'), outputFolderName+"/"+local_filename+".pdf")
