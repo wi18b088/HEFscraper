@@ -50,13 +50,16 @@ contentType = "Article"
 # Get CSV from springerlink search (nice feature provided by Springer Link)
 # URL taken from https://link.springer.com/search
 # Additional constraints possible
-# Download from web disabled for development / debug
-df = pd.read_csv(f'https://link.springer.com/search/csv?showAll=false&query={"+".join(keywords)}&date-facet-mode=between&facet-start-year={startYear}&facet-end-year={endYear}&facet-content-type="{contentType}"')
-# df.to_csv(f"{sourceFolderName}/springerlink_articles_newest.csv")
-print(df.head())
-#df = pd.read_csv(f'{sourceFolderName}/springerlink_search_results.csv')
 
-# Print information about dataframe
+### Download from web disabled for development / debug
+# df = pd.read_csv(f'https://link.springer.com/search/csv?showAll=false&query={"+".join(keywords)}&date-facet-mode=between&facet-start-year={startYear}&facet-end-year={endYear}&facet-content-type="{contentType}"')
+
+### Save query to .csv in source folder.
+# df.to_csv(f"{sourceFolderName}/springerlink_articles_newest.csv")
+# print(df.head())
+df = pd.read_csv(f'{sourceFolderName}/springerlink_articles_newest.csv')
+
+### Print information about dataframe
 # print(df.columns)                       # Prints the headers
 # print(df["Item Title"][0:5])            # Prints the first 5 titles of available papers
 
