@@ -52,6 +52,7 @@ contentType = "Article"
 # Additional constraints possible
 # Download from web disabled for development / debug
 df = pd.read_csv(f'https://link.springer.com/search/csv?showAll=false&query={"+".join(keywords)}&date-facet-mode=between&facet-start-year={startYear}&facet-end-year={endYear}&facet-content-type="{contentType}"')
+# df.to_csv(f"{sourceFolderName}/springerlink_articles_newest.csv")
 print(df.head())
 #df = pd.read_csv(f'{sourceFolderName}/springerlink_search_results.csv')
 
@@ -66,21 +67,22 @@ for i, row in df.iterrows():
     if i == 10:
         break
 
-        page = requests.get(row["URL"])
-        if page.status_code == 200:
-            soup = BeautifulSoup(page.text, 'html.parser')
-            
-            # Find PDF button on springerlink website
-            PDFbutton = soup.find('a', attrs={'class': 'c-pdf-download__link'})
+    # Grabs URL from CSV file
+    page = requests.get(row["URL"])
+    if page.status_code == 200:
+        soup = BeautifulSoup(page.text, 'html.parser')
+        
+        # Find PDF button on springerlink website
+        PDFbutton = soup.find('a', attrs={'class': 'c-pdf-download__link'})
+        if PDFbutton is not None:
+            URL = PDFbutton.get('href')
+        else: # Find alternative PDF download button
+            PDFbutton = soup.find('a', attrs={'data-track-action': 'Pdf download'})
             if PDFbutton is not None:
-                URL = PDFbutton.get('href')
-            else: # Find alternative PDF download button
-                PDFbutton = soup.find('a', attrs={'data-track-action': 'Pdf download'})
-                if PDFbutton is not None:
-                    URL = "https://link.springer.com" + PDFbutton.get('href')
-                else:
-                    continue
+                URL = "https://link.springer.com" + PDFbutton.get('href')
+            else:
+                continue
 
-            local_filename = soup.find('h1').text
-            # Download file to output folder    
-            urllib.request.urlretrieve(URL, outputFolderName+"/"+local_filename+".pdf")    
+        local_filename = soup.find('h1').text
+        # Download file to output folder    
+        urllib.request.urlretrieve(URL, outputFolderName+"/"+local_filename+".pdf")    
