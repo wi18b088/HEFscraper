@@ -3,6 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 import logging
 import os
+from pathvalidate import sanitize_filename
 
 # Define some parameters
 ownFileName = os.path.basename(__file__)
@@ -80,7 +81,7 @@ for i, row in df.iterrows():
             continue
 
         articlesections = articlebody.find_all('section')
-        with open(f"{outputFolderName}/{i}_{soup.find('h1').text}.txt", "w") as myfile:
+        with open(f"{outputFolderName}/{i}_{sanitize_filename(soup.find('h1').text)}.txt", "w") as myfile:
             for sec in articlesections:
                 try:
                     # Save contents to file
