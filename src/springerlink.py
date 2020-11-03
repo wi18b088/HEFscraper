@@ -49,6 +49,11 @@ keywords = ["hybrid", "electric", "flying", "aircraft"]
 # Download from web disabled for development / debug
 # df = pd.read_csv(f'https://link.springer.com/search/csv?showAll=false&query={"+".join(keywords)}')
 
+### New download query
+df = pd.read_csv(f'https://link.springer.com/search/csv?showAll=false&query={"+".join(keywords)}&date-facet-mode=between&facet-start-year={startYear}&facet-end-year={endYear}&facet-content-type="{contentType}"')
+### reading newest articles.csv
+df = pd.read_csv(f'{sourceFolderName}/springerlink_articles_newest.csv')
+
 df = pd.read_csv(f'{sourceFolderName}/springerlink_search_results.csv')
 
 # Print information about dataframe
