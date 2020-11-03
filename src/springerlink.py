@@ -42,6 +42,9 @@ logger.addHandler(file_handler)
 
 # Define Keywords for one single combined search query
 keywords = ["hybrid", "electric", "flying", "aircraft"]
+startYear = 2010
+endYear = 2021
+contentType = "Article"
 
 # Get CSV from springerlink search (nice feature provided by Springer Link)
 # URL taken from https://link.springer.com/search
@@ -50,11 +53,10 @@ keywords = ["hybrid", "electric", "flying", "aircraft"]
 # df = pd.read_csv(f'https://link.springer.com/search/csv?showAll=false&query={"+".join(keywords)}')
 
 ### New download query
-df = pd.read_csv(f'https://link.springer.com/search/csv?showAll=false&query={"+".join(keywords)}&date-facet-mode=between&facet-start-year={startYear}&facet-end-year={endYear}&facet-content-type="{contentType}"')
+# df = pd.read_csv(f'https://link.springer.com/search/csv?showAll=false&query={"+".join(keywords)}&date-facet-mode=between&facet-start-year={startYear}&facet-end-year={endYear}&facet-content-type="{contentType}"')
+
 ### reading newest articles.csv
 df = pd.read_csv(f'{sourceFolderName}/springerlink_articles_newest.csv')
-
-df = pd.read_csv(f'{sourceFolderName}/springerlink_search_results.csv')
 
 # Print information about dataframe
 # print(df.columns)                       # Prints the headers

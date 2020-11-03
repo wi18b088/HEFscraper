@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 import logging
 import os
 import urllib.request
+from pathvalidate import sanitize_filename
 
 # Define some parameters
 ownFileName = os.path.basename(__file__)
@@ -84,8 +85,9 @@ for i, row in df.iterrows():
             if PDFbutton is not None:
                 URL = "https://link.springer.com" + PDFbutton.get('href')
             else:
+                logger.info(f"Position {i}: Entry with name '{row['Item Title']}' has no PDF download button.")
                 continue
 
-        local_filename = soup.find('h1').text
+        local_filename = sanitize_filename(str(i) + "_" +  soup.find('h1').text)
         # Download file to output folder    
         urllib.request.urlretrieve(URL, outputFolderName+"/"+local_filename+".pdf")    
