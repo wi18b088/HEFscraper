@@ -5,6 +5,7 @@ import logging
 import os
 import urllib.request
 from pathvalidate import sanitize_filename
+import runpy
 
 # Define some parameters
 ownFileName = os.path.basename(__file__)
@@ -76,7 +77,11 @@ for i, row in df.iterrows():
     if page.status_code == 200:
         soup = BeautifulSoup(page.text, 'html.parser')
         
-        # Find PDF button on springerlink website
+        # Look for paid article button. Seems to be ignored?
+        #BuyArticleButton = soup.find('a', attrs={'class': 'c-article-buy-box'})
+        #if BuyArticleButton is None:
+            # Find PDF button on springerlink website
+        
         PDFbutton = soup.find('a', attrs={'class': 'c-pdf-download__link'})
         if PDFbutton is not None:
             URL = PDFbutton.get('href')
@@ -86,7 +91,13 @@ for i, row in df.iterrows():
                 URL = "https://link.springer.com" + PDFbutton.get('href')
             else:
                 logger.info(f"Position {i}: Entry with name '{row['Item Title']}' has no PDF download button.")
+                # if there is no PDF button, run springerlink.py to scrape text from the page
+                #file_globals = runpy.run_path(f'{sourceFolderName}/springerlink.py')
                 continue
+        
+        #else: #skipping paid articles
+         #   print("Skipped article because it's paid")
+          #  continue
 
         local_filename = sanitize_filename(str(i) + "_" +  soup.find('h1').text)
         # Download file to output folder    
