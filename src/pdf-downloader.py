@@ -54,12 +54,12 @@ contentType = "Article"
 # Additional constraints possible
 
 ### Download from web disabled for development / debug
-# df = pd.read_csv(f'https://link.springer.com/search/csv?showAll=false&query={"+".join(keywords)}&date-facet-mode=between&facet-start-year={startYear}&facet-end-year={endYear}&facet-content-type="{contentType}"')
+df = pd.read_csv(f'https://link.springer.com/search/csv?showAll=false&query={"+".join(keywords)}&date-facet-mode=between&facet-start-year={startYear}&facet-end-year={endYear}&facet-content-type="{contentType}"')
 
 ### Save query to .csv in source folder.
 # df.to_csv(f"{sourceFolderName}/springerlink_articles_newest.csv")
 # print(df.head())
-df = pd.read_csv(f'{sourceFolderName}/springerlink_articles_newest.csv')
+# df = pd.read_csv(f'{sourceFolderName}/springerlink_articles_newest.csv')
 
 ### Print information about dataframe
 # print(df.columns)                       # Prints the headers
