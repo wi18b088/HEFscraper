@@ -19,7 +19,9 @@ for i, link in enumerate(linklist):
         soup = BeautifulSoup(page.text, 'html.parser')
 
         # Create new file named with the counter and a heading from the webpage
-        with open(f"{outputFolderName}/{i}_{sanitize_filename(soup.find('h1').text.replace(' ', ''))}.txt", "w") as myfile:
+        heading = "Article"
+        if temp := soup.find('h1'): heading = temp.text
+        with open(f"{outputFolderName}/{i}_{sanitize_filename(heading.replace(' ', ''))}.txt", "w") as myfile:
                 try:
                     # Save contents to file
                     print(f"No: {i}")
