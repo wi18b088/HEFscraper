@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 from pathvalidate import sanitize_filename
 import os
 
-from universalweblinks import linklist
+from universalscraperconfig import linklist, outputFolderName
 
 # Check for output folder
 if not os.path.exists(outputFolderName):
