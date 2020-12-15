@@ -30,7 +30,8 @@ for i, link in enumerate(linklist):
         with open(f"{outputFolderName}/{i}_{sanitize_filename(soup.find('h1').text.replace(' ', ''))}.txt", "w") as myfile:
                 try:
                     # Save contents to file
-                    print(f"No: {i}; Content:")
+                    print(f"No: {i}")
+                    # myfile.write(soup.text)
                     myfile.write(soup.text)
                     myfile.write("\n")
                 except:
