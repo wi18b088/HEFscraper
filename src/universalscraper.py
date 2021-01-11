@@ -2,13 +2,14 @@ import requests
 from bs4 import BeautifulSoup
 from pathvalidate import sanitize_filename
 import os
+import pathlib
 
 from universalscraperconfig import linklist, outputFolderName
 
 # Check for output folder
 if not os.path.exists(outputFolderName):
     # Create folder, if it doesn't exist yet
-    os.mkdir(outputFolderName)
+    pathlib.Path(outputFolderName).mkdir(parents=True, exist_ok=True)
 
 # Step through list of links
 for i, link in enumerate(linklist):

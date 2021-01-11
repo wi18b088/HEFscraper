@@ -4,10 +4,12 @@ from bs4 import BeautifulSoup
 import logging
 import os
 from pathvalidate import sanitize_filename
+import pathlib
 
 # Define some parameters
 ownFileName = os.path.basename(__file__)
-outputFolderName = "output"
+# outputFolderName = "output"
+outputFolderName = "/mnt/inout/output/scraperOutput/springerLink"
 sourceFolderName = "src"
 logFolderName = "log"
 
@@ -15,11 +17,11 @@ logFolderName = "log"
 
 # Check for log folder
 if not os.path.exists(logFolderName):
-    os.mkdir(logFolderName)
+    pathlib.Path(logFolderName).mkdir(parents=True, exist_ok=True)
 
 # Check for output folder
 if not os.path.exists(outputFolderName):
-    os.mkdir(outputFolderName)
+    pathlib.Path(outputFolderName).mkdir(parents=True, exist_ok=True)
 
 # Remove old log file
 if os.path.exists(f'{logFolderName}/{ownFileName.split(".")[0]}.log'):

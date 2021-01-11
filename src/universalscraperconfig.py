@@ -1,3 +1,5 @@
+# outputFolderName = "output/additionalSources"
+outputFolderName = "/mnt/inout/scraperOutput/universal"
 linklist = [
     "https://medium.com/swlh/why-hybrid-electric-aircraft-will-lead-the-way-in-vtol-c3c1fcec1f6f",
     "https://techxplore.com/news/2020-11-hybrid-electric-fuel-aircraft-green.html",
@@ -39,4 +41,3 @@ linklist = [
     "https://arxiv.org/pdf/2004.02582.pdf",
     "https://link.springer.com/article/10.1007/s13272-020-00449-8",
 ]
-outputFolderName = "output/additionalSources"
