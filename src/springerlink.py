@@ -35,7 +35,7 @@ file_handler = logging.FileHandler(f'{logFolderName}/{ownFileName.split(".")[0]}
 
 logger.setLevel(logging.DEBUG)
 stream_handler.setLevel(logging.DEBUG)
-file_handler.setLevel(logging.INFO)
+file_handler.setLevel("INFO")
 
 stream_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s', '%d/%m/%Y %H:%M:%S')
 file_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s', '%d/%m/%Y %H:%M:%S')
@@ -48,6 +48,7 @@ logger.addHandler(file_handler)
 # TODO:
 # if no config exists in /mnt/inout/in/hef-scraper/config/springerlinkconfig
 if pathlib.Path( external_config_file_path + "/" + external_config_file_name).is_file():
+    logger.info("External Configuration found.")
     import importlib.util
     spec = importlib.util.spec_from_file_location("scraper_config", external_config_file_path + "/" + external_config_file_name)
     config_module = importlib.util.module_from_spec(spec)
@@ -74,6 +75,7 @@ if pathlib.Path( external_config_file_path + "/" + external_config_file_name).is
     except AttributeError:
         from springerlinkconfig import maxDownloads
 else:
+    logger.info("Using default configuration.")
     from springerlinkconfig import keywords, startYear, endYear, contentType, maxDownloads
 
 df = pd.read_csv(f'https://link.springer.com/search/csv?showAll=false&query={"+".join(keywords)}&date-facet-mode=between&facet-start-year={startYear}&facet-end-year={endYear}&facet-content-type="{contentType}"')
