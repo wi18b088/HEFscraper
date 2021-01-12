@@ -10,9 +10,10 @@ import pathlib
 # Define some parameters
 ownFileName = os.path.basename(__file__)
 # outputFolderName = "output"
-outputFolderName = "/mnt/inout/output/scraperOutput/springerLink"
-sourceFolderName = "src"
-logFolderName = "log"
+outputFolderName = "/mnt/inout/output/scraper/springerLink"
+logFolderName = "/mnt/inout/output/scraper/springerLink/log"
+external_config_file_path = "/mnt/inout/config"
+external_config_file_name = "scraper_config.py"
 
 # Logger configuration
 
@@ -46,19 +47,36 @@ logger.addHandler(file_handler)
 
 # TODO:
 # if no config exists in /mnt/inout/in/hef-scraper/config/springerlinkconfig
-from springerlinkconfig import *
+if pathlib.Path( external_config_file_path + "/" + external_config_file_name).is_file():
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("scraper_config", external_config_file_path + "/" + external_config_file_name)
+    config_module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(config_module)
 
-# Get CSV from springerlink search (nice feature provided by Springer Link)
-# URL taken from https://link.springer.com/search
-# Additional constraints possible
-# Download from web disabled for development / debug
-# df = pd.read_csv(f'https://link.springer.com/search/csv?showAll=false&query={"+".join(keywords)}')
+    try:
+        keywords = config_module.keywords
+    except AttributeError:
+        from springerlinkconfig import keywords
+    try:
+        startYear = config_module.startYear
+    except AttributeError:
+        from springerlinkconfig import startYear
+    try:
+        endYear = config_module.endYear
+    except AttributeError:
+        from springerlinkconfig import endYear
+    try:
+        contentType = config_module.contentType
+    except AttributeError:
+        from springerlinkconfig import contentType
+    try:
+        maxDownloads = config_module.maxDownloads
+    except AttributeError:
+        from springerlinkconfig import maxDownloads
+else:
+    from springerlinkconfig import keywords, startYear, endYear, contentType, maxDownloads
 
-### New download query
 df = pd.read_csv(f'https://link.springer.com/search/csv?showAll=false&query={"+".join(keywords)}&date-facet-mode=between&facet-start-year={startYear}&facet-end-year={endYear}&facet-content-type="{contentType}"')
-
-### reading newest articles.csv
-# df = pd.read_csv(f'{sourceFolderName}/springerlink_articles_newest.csv')
 
 # Print information about dataframe
 # print(df.columns)                       # Prints the headers
@@ -67,8 +85,7 @@ df = pd.read_csv(f'https://link.springer.com/search/csv?showAll=false&query={"+"
 # iterate over every URL in CSV and download text
 for i, row in df.iterrows():
 
-    # for development & testing purposes only download 10 articles
-    if i == 10:
+    if i == maxDownloads:
         break
 
     page = requests.get(row["URL"])
