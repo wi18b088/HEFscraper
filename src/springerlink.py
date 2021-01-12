@@ -33,8 +33,8 @@ logger = logging.getLogger(ownFileName)
 stream_handler = logging.StreamHandler()
 file_handler = logging.FileHandler(f'{logFolderName}/{ownFileName.split(".")[0]}.log')
 
-logger.setLevel(logging.DEBUG)
-stream_handler.setLevel(logging.DEBUG)
+logger.setLevel("DEBUG")
+stream_handler.setLevel("DEBUG")
 file_handler.setLevel("INFO")
 
 stream_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s', '%d/%m/%Y %H:%M:%S')
@@ -45,7 +45,6 @@ file_handler.setFormatter(file_format)
 logger.addHandler(stream_handler)
 logger.addHandler(file_handler)
 
-# TODO:
 # if no config exists in /mnt/inout/in/hef-scraper/config/springerlinkconfig
 if pathlib.Path( external_config_file_path + "/" + external_config_file_name).is_file():
     logger.info("External Configuration found.")

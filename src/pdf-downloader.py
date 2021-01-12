@@ -13,7 +13,9 @@ ownFileName = os.path.basename(__file__)
 # outputFolderName = "output"
 outputFolderName = "/mnt/inout/output/scraperOutput/pdf"
 sourceFolderName = "src"
-logFolderName = "log"
+logFolderName = "/mnt/inout/output/scraper/pdf-downloader/log"
+external_config_file_path = "/mnt/inout/config"
+external_config_file_name = "scraper_config.py"
 
 # Logger configuration
 
@@ -33,9 +35,9 @@ logger = logging.getLogger(ownFileName)
 stream_handler = logging.StreamHandler()
 file_handler = logging.FileHandler(f'{logFolderName}/{ownFileName.split(".")[0]}.log')
 
-logger.setLevel(logging.DEBUG)
-stream_handler.setLevel(logging.DEBUG)
-file_handler.setLevel(logging.INFO)
+logger.setLevel("DEBUG")
+stream_handler.setLevel("DEBUG")
+file_handler.setLevel("INFO")
 
 stream_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s', '%d/%m/%Y %H:%M:%S')
 file_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s', '%d/%m/%Y %H:%M:%S')
@@ -45,23 +47,39 @@ file_handler.setFormatter(file_format)
 logger.addHandler(stream_handler)
 logger.addHandler(file_handler)
 
-# Define Keywords for one single combined search query
-keywords = ["hybrid", "electric", "flying", "aircraft"]
-startYear = 2010
-endYear = 2021
-contentType = "Article"
+# if no config exists in /mnt/inout/in/hef-scraper/config/springerlinkconfig
+if pathlib.Path( external_config_file_path + "/" + external_config_file_name).is_file():
+    logger.info("External Configuration found.")
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("scraper_config", external_config_file_path + "/" + external_config_file_name)
+    config_module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(config_module)
 
-# Get CSV from springerlink search (nice feature provided by Springer Link)
-# URL taken from https://link.springer.com/search
-# Additional constraints possible
+    try:
+        keywords = config_module.keywords
+    except AttributeError:
+        from springerlinkconfig import keywords
+    try:
+        startYear = config_module.startYear
+    except AttributeError:
+        from springerlinkconfig import startYear
+    try:
+        endYear = config_module.endYear
+    except AttributeError:
+        from springerlinkconfig import endYear
+    try:
+        contentType = config_module.contentType
+    except AttributeError:
+        from springerlinkconfig import contentType
+    try:
+        maxDownloads = config_module.maxDownloads
+    except AttributeError:
+        from springerlinkconfig import maxDownloads
+else:
+    logger.info("Using default configuration.")
+    from springerlinkconfig import keywords, startYear, endYear, contentType, maxDownloads
 
-### Download from web disabled for development / debug
 df = pd.read_csv(f'https://link.springer.com/search/csv?showAll=false&query={"+".join(keywords)}&date-facet-mode=between&facet-start-year={startYear}&facet-end-year={endYear}&facet-content-type="{contentType}"')
-
-### Save query to .csv in source folder.
-# df.to_csv(f"{sourceFolderName}/springerlink_articles_newest.csv")
-# print(df.head())
-# df = pd.read_csv(f'{sourceFolderName}/springerlink_articles_newest.csv')
 
 ### Print information about dataframe
 # print(df.columns)                       # Prints the headers
@@ -71,7 +89,7 @@ df = pd.read_csv(f'https://link.springer.com/search/csv?showAll=false&query={"+"
 for i, row in df.iterrows():
 
     # for development & testing purposes only download 10 articles
-    if i == 10:
+    if i == maxDownloads:
         break
 
     # Grabs URL from CSV file
