@@ -4,11 +4,25 @@ from pathvalidate import sanitize_filename
 import os
 import pathlib
 
-from universalscraperconfig import linklist, outputFolderName
 
-# Check for output folder
+outputFolderName = "/mnt/inout/output/scraper/universal/txt"
+external_config_file_path = "/mnt/inout/config"
+external_config_file_name = "universalscraperconfig.py"
+
+if pathlib.Path( external_config_file_path + "/" + external_config_file_name).is_file():
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("universal_config", external_config_file_path + "/" + external_config_file_name)
+    config_module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(config_module)
+
+    try:
+        linklist = config_module.linklist
+    except AttributeError:
+        from universalscraperconfig import linklist
+else:
+    from universalscraperconfig import linklist
+
 if not os.path.exists(outputFolderName):
-    # Create folder, if it doesn't exist yet
     pathlib.Path(outputFolderName).mkdir(parents=True, exist_ok=True)
 
 # Step through list of links
@@ -26,7 +40,6 @@ for i, link in enumerate(linklist):
                 try:
                     # Save contents to file
                     print(f"No: {i}")
-                    # myfile.write(soup.text)
                     myfile.write(soup.text)
                     myfile.write("\n")
                 except:
