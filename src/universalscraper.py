@@ -5,7 +5,7 @@ import os
 import pathlib
 
 
-outputFolderName = "/mnt/inout/output/scraper/universal/txt"
+outputFolderName = "/mnt/inout/output/scraper/txt"
 external_config_file_path = "/mnt/inout/config"
 external_config_file_name = "universalscraperconfig.py"
 

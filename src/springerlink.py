@@ -8,7 +8,7 @@ from pathvalidate import sanitize_filename
 import pathlib
 
 ownFileName = os.path.basename(__file__)
-outputFolderName = "/mnt/inout/output/scraper/springerLink/txt"
+outputFolderName = "/mnt/inout/output/scraper/txt"
 logFolderName = "/mnt/inout/output/scraper/springerLink/log"
 external_config_file_path = "/mnt/inout/config"
 external_config_file_name = "scraper_config.py"

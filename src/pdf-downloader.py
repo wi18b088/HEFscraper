@@ -11,7 +11,7 @@ import pathlib
 # Define some parameters
 ownFileName = os.path.basename(__file__)
 # outputFolderName = "output"
-outputFolderName = "/mnt/inout/output/scraper/springerlink/pdf"
+outputFolderName = "/mnt/inout/output/scraper/pdf"
 sourceFolderName = "src"
 logFolderName = "/mnt/inout/output/scraper/springerlink/log"
 external_config_file_path = "/mnt/inout/config"
