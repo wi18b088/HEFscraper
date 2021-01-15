@@ -29,4 +29,3 @@ linklist = [
     "https://link.springer.com/article/10.1007/s13272-017-0272-1",
     "https://link.springer.com/article/10.1007/s13272-020-00449-8",
 ]
-outputFolderName = "output/additionalSources"
