@@ -28,7 +28,7 @@ if not os.path.exists(outputFolderName):
 # Step through list of links
 for i, link in enumerate(linklist):
     page = requests.get(link)
-    print(page.status_code)
+    print(f"HTTP Status Code: {page.status_code}")
     # If request was successful
     if page.status_code == 200:
         soup = BeautifulSoup(page.text, 'html.parser')
@@ -39,7 +39,7 @@ for i, link in enumerate(linklist):
         with open(f"{outputFolderName}/{i}_{sanitize_filename(heading.replace(' ', ''))}.txt", "w") as myfile:
                 try:
                     # Save contents to file
-                    print(f"No: {i}")
+                    print(f"Downloading entry No: {i}")
                     myfile.write(soup.text)
                     myfile.write("\n")
                 except:
